@@ -800,6 +800,19 @@ main (int argc, char **argv) {
             return False
         return True
 
+    def has_flag(self, flagname):
+        """Return a boolean indicating whether a flag name is supported on
+        the specified compiler.
+        """
+        import tempfile
+        with tempfile.NamedTemporaryFile('w', suffix='.cpp') as f:
+            f.write('int main (int argc, char **argv) { return 0; }')
+            try:
+                self.compile([f.name], extra_postargs=[flagname])
+            except CompileError:
+                return False
+        return True
+
     def find_library_file (self, dirs, lib, debug=0):
         """Search the specified list of directories for a static or shared
         library file 'lib' and return the full path to that file.  If
